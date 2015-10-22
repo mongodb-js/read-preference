@@ -1,59 +1,19 @@
-var NEEDS_SLAVE_OK = [
-  'primaryPreferred',
-  'secondary',
-  'secondaryPreferred',
-  'nearest'
-];
-
 /**
- * @param {String} preference
- * @param {Object} tags
- * @param {Object} [options]
- * @option {Boolean} slave_ok - Manually override sending the slaveOk bit.
- * @return {ReadPreference}
- * @api public
+ * Backwards compat support from `mongodb@2.0.43`.
  */
-function ReadPreference(preference, tags, options) {
-  if (!(this instanceof ReadPreference)) {
-    return new ReadPreference(preference, tags, options);
+var legacy = false;
+try {
+  ReadPreference = require('mongodb/node_modules/mongodb-core').ReadPreference;
+  legacy = true;
+} catch (e) {
+  try {
+    ReadPreference = require('mongodb-core').ReadPreference;
+    legacy = true;
+  } catch (err) {
+    legacy = false;
+    ReadPreference = require('./read-preference');
   }
-  options = options || {};
-
-  this.preference = preference;
-  this.tags = tags || [];
-  this.options = options;
-  this.slave_ok = options.slave_ok || NEEDS_SLAVE_OK.indexOf(this.preference) > -1;
 }
-
-/**
- * This needs slaveOk bit set
- *
- * @return {Boolean}
- * @api private
- */
-ReadPreference.prototype.slaveOk = function() {
-  return this.slave_ok;
-};
-
-/**
- * Are the two read preference equivalent
- * in terms of preferences built into the wire prototcol.
- *
- * @param {ReadPreference} a
- * @return {Boolean}
- * @api private
- */
-ReadPreference.prototype.equals = function(a) {
-  return a.preference == this.preference;
-};
-
-ReadPreference.prototype.toJSON = function() {
-  return {
-    preference: this.preference,
-    tags: this.tags,
-    options: this.options
-  };
-};
 
 module.exports = exports = ReadPreference;
 
@@ -92,3 +52,16 @@ exports.secondaryPreferred = new ReadPreference('secondaryPreferred');
  * @api public
  */
 exports.nearest = new ReadPreference('nearest');
+
+/**
+ * Read from any instance.
+ *
+ * @api public
+ */
+exports.any = new ReadPreference('any');
+
+if (legacy) {
+  exports.any.slaveOk = function() {
+    return true;
+  };
+}

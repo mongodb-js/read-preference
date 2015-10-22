@@ -13,6 +13,12 @@
     "type": "git",
     "url": "git://github.com/mongodb-js/read-preference.git"
   },
+  "dependency-check": {
+    "ignore": [
+      "mongodb",
+      "mongodb-core"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {
     "eslint-config-mongodb-js": "^0.1.6",
