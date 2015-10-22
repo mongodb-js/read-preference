@@ -6,23 +6,23 @@ var NEEDS_SLAVE_OK = [
 ];
 
 /**
- * @param {String} mode
+ * @param {String} preference
  * @param {Object} tags
  * @param {Object} [options]
  * @option {Boolean} slave_ok - Manually override sending the slaveOk bit.
  * @return {ReadPreference}
  * @api public
  */
-function ReadPreference(mode, tags, options) {
+function ReadPreference(preference, tags, options) {
   if (!(this instanceof ReadPreference)) {
-    return new ReadPreference(mode, tags, options);
+    return new ReadPreference(preference, tags, options);
   }
   options = options || {};
 
-  this.mode = mode;
+  this.preference = preference;
   this.tags = tags || [];
   this.options = options;
-  this.slave_ok = options.slave_ok || NEEDS_SLAVE_OK.indexOf(this.mode) > -1;
+  this.slave_ok = options.slave_ok || NEEDS_SLAVE_OK.indexOf(this.preference) > -1;
 }
 
 /**
@@ -37,19 +37,19 @@ ReadPreference.prototype.slaveOk = function() {
 
 /**
  * Are the two read preference equivalent
- * in terms of modes built into the wire prototcol.
+ * in terms of preferences built into the wire prototcol.
  *
  * @param {ReadPreference} a
  * @return {Boolean}
  * @api private
  */
 ReadPreference.prototype.equals = function(a) {
-  return a.mode == this.mode;
+  return a.preference == this.preference;
 };
 
 ReadPreference.prototype.toJSON = function() {
   return {
-    mode: this.mode,
+    preference: this.preference,
     tags: this.tags,
     options: this.options
   };
