@@ -2,6 +2,8 @@
  * Backwards compat support from `mongodb@2.0.43`.
  */
 var legacy = false;
+var ReadPreference;
+
 try {
   ReadPreference = require('mongodb/node_modules/mongodb-core').ReadPreference;
   legacy = true;

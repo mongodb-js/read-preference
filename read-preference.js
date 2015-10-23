@@ -6,7 +6,6 @@ var NEEDS_SLAVE_OK = [
   'any'
 ];
 
-
 /**
  * @param {String} preference
  * @param {Object} tags
@@ -46,7 +45,7 @@ ReadPreference.prototype.slaveOk = function() {
  * @api private
  */
 ReadPreference.prototype.equals = function(a) {
-  return a.preference == this.preference;
+  return a.preference === this.preference;
 };
 
 ReadPreference.prototype.toJSON = function() {
