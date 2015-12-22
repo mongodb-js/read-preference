@@ -5,15 +5,20 @@ var legacy = false;
 var ReadPreference;
 
 try {
-  ReadPreference = require('mongodb/node_modules/mongodb-core').ReadPreference;
-  legacy = true;
+  ReadPreference = require('mongodb').ReadPreference;
+  legacy = false;
 } catch (e) {
   try {
-    ReadPreference = require('mongodb-core').ReadPreference;
+    ReadPreference = require('mongodb/node_modules/mongodb-core').ReadPreference;
     legacy = true;
   } catch (err) {
-    legacy = false;
-    ReadPreference = require('./read-preference');
+    try {
+      ReadPreference = require('mongodb-core').ReadPreference;
+      legacy = true;
+    } catch (error) {
+      legacy = false;
+      ReadPreference = require('./read-preference');
+    }
   }
 }
 

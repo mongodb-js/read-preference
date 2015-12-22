@@ -1,33 +1,33 @@
 var ReadPreference = require('../');
 var assert = require('assert');
 
+function testReadPref(rp, expectedStr, expectedSlaveOk) {
+  assert(rp);
+  if (typeof rp.slaveOk === 'function') {
+    assert.equal(rp.preference, expectedStr);
+    assert.equal(rp.slaveOk(), expectedSlaveOk);
+  } else {
+    assert.equal(rp.mode, expectedStr);
+  }
+}
+
 describe('mongodb-read-preference', function() {
   it('should work', function() {
     assert(ReadPreference);
   });
   it('should expose `primary`', function() {
-    assert(ReadPreference.primary);
-    assert.equal(ReadPreference.primary.preference, 'primary');
-    assert.equal(ReadPreference.primary.slaveOk(), false);
+    testReadPref(ReadPreference.primary, 'primary', false);
   });
   it('should expose `primaryPreferred`', function() {
-    assert(ReadPreference.primaryPreferred);
-    assert.equal(ReadPreference.primaryPreferred.preference, 'primaryPreferred');
-    assert.equal(ReadPreference.primaryPreferred.slaveOk(), true);
+    testReadPref(ReadPreference.primaryPreferred, 'primaryPreferred', true);
   });
   it('should expose `secondary`', function() {
-    assert(ReadPreference.secondary);
-    assert.equal(ReadPreference.secondary.preference, 'secondary');
-    assert.equal(ReadPreference.secondary.slaveOk(), true);
+    testReadPref(ReadPreference.secondary, 'secondary', true);
   });
   it('should expose `secondaryPreferred`', function() {
-    assert(ReadPreference.secondaryPreferred);
-    assert.equal(ReadPreference.secondaryPreferred.preference, 'secondaryPreferred');
-    assert.equal(ReadPreference.secondaryPreferred.slaveOk(), true);
+    testReadPref(ReadPreference.secondaryPreferred, 'secondaryPreferred', true);
   });
   it('should expose `nearest`', function() {
-    assert(ReadPreference.nearest);
-    assert.equal(ReadPreference.nearest.preference, 'nearest');
-    assert.equal(ReadPreference.nearest.slaveOk(), true);
+    testReadPref(ReadPreference.nearest, 'nearest', true);
   });
 });
