@@ -4,7 +4,7 @@ var assert = require('assert');
 function testReadPref(rp, expectedStr, expectedSlaveOk) {
   assert(rp);
   if (typeof rp.slaveOk === 'function') {
-    assert.equal(rp.preference, expectedStr);
+    assert.equal(rp.mode, expectedStr);
     assert.equal(rp.slaveOk(), expectedSlaveOk);
   } else {
     assert.equal(rp.mode, expectedStr);
@@ -29,5 +29,21 @@ describe('mongodb-read-preference', function() {
   });
   it('should expose `nearest`', function() {
     testReadPref(ReadPreference.nearest, 'nearest', true);
+  });
+
+  it('should be an instanceof the driver ReadPreference if available', function() {
+    var DriverReadPreference;
+    try {
+      DriverReadPreference = require('mongodb').ReadPreference;
+    } catch (e) {
+      DriverReadPreference = null;
+    }
+
+    if (!DriverReadPreference) {
+      this.skip();
+      return;
+    }
+
+    assert(ReadPreference.primary instanceof DriverReadPreference);
   });
 });
