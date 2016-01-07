@@ -46,4 +46,20 @@ describe('mongodb-read-preference', function() {
 
     assert(ReadPreference.primary instanceof DriverReadPreference);
   });
+
+  it('should be an instanceof the mongodb-core ReadPreference if available', function() {
+    var CoreReadPreference;
+    try {
+      CoreReadPreference = require('mongodb-core').ReadPreference;
+    } catch (e) {
+      CoreReadPreference = null;
+    }
+
+    if (!CoreReadPreference) {
+      this.skip();
+      return;
+    }
+
+    assert(ReadPreference.primary instanceof CoreReadPreference);
+  });
 });

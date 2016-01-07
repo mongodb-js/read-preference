@@ -2,14 +2,25 @@ var inherits = require('util').inherits;
 
 var ReadPreference = require('./read-preference');
 var DriverReadPreference;
+var CoreReadPreference;
 try {
   DriverReadPreference = require('mongodb').ReadPreference;
 } catch (e) {
   DriverReadPreference = null;
 }
 
+try {
+  CoreReadPreference = require('mongodb-core').ReadPreference;
+} catch (e) {
+  CoreReadPreference = null;
+}
+
 if (DriverReadPreference) {
   inherits(ReadPreference, DriverReadPreference);
+}
+
+if (CoreReadPreference) {
+  // inherits(ReadPreference, CoreReadPreference);
 }
 
 
