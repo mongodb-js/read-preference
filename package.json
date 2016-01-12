@@ -1,7 +1,7 @@
 {
   "name": "mongodb-read-preference",
   "description": "MongoDB Read Preferences.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "scripts": {
     "fmt": "mongodb-js-fmt",
     "check": "mongodb-js-precommit",
