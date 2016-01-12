@@ -51,6 +51,12 @@ describe('mongodb-read-preference', function() {
     var CoreReadPreference;
     try {
       CoreReadPreference = require('mongodb-core').ReadPreference;
+      try {
+        var DriverReadPreference = require('mongodb').ReadPreference;
+        if (DriverReadPreference) CoreReadPreference = null;
+      } catch (e) {
+        // driver read preference not found.
+      }
     } catch (e) {
       CoreReadPreference = null;
     }

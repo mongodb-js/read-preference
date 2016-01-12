@@ -17,10 +17,8 @@ try {
 
 if (DriverReadPreference) {
   inherits(ReadPreference, DriverReadPreference);
-}
-
-if (CoreReadPreference) {
-  // inherits(ReadPreference, CoreReadPreference);
+} else if (CoreReadPreference) {
+  inherits(ReadPreference, CoreReadPreference);
 }
 
 
