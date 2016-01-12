@@ -1,26 +1,26 @@
-/**
- * Backwards compat support from `mongodb@2.0.43`.
- */
-var legacy = false;
-var ReadPreference;
+var inherits = require('util').inherits;
+
+var ReadPreference = require('./read-preference');
+var DriverReadPreference;
+var CoreReadPreference;
+try {
+  DriverReadPreference = require('mongodb').ReadPreference;
+} catch (e) {
+  DriverReadPreference = null;
+}
 
 try {
-  ReadPreference = require('mongodb').ReadPreference;
-  legacy = false;
+  CoreReadPreference = require('mongodb-core').ReadPreference;
 } catch (e) {
-  try {
-    ReadPreference = require('mongodb/node_modules/mongodb-core').ReadPreference;
-    legacy = true;
-  } catch (err) {
-    try {
-      ReadPreference = require('mongodb-core').ReadPreference;
-      legacy = true;
-    } catch (error) {
-      legacy = false;
-      ReadPreference = require('./read-preference');
-    }
-  }
+  CoreReadPreference = null;
 }
+
+if (DriverReadPreference) {
+  inherits(ReadPreference, DriverReadPreference);
+} else if (CoreReadPreference) {
+  inherits(ReadPreference, CoreReadPreference);
+}
+
 
 module.exports = exports = ReadPreference;
 
@@ -66,9 +66,3 @@ exports.nearest = new ReadPreference('nearest');
  * @api public
  */
 exports.any = new ReadPreference('any');
-
-if (legacy) {
-  exports.any.slaveOk = function() {
-    return true;
-  };
-}
