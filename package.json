@@ -22,7 +22,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "eslint-config-mongodb-js": "^2.0.0",
+    "eslint-config-mongodb-js": "^2.1.0",
     "mocha": "^3.0.2",
     "mongodb": "^2.1.4",
     "mongodb-core": "^2.0.11",
